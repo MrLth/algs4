@@ -1,0 +1,15 @@
+**/node_modules
+/.vscode
+.history
+.DS_Store
+npm-debug.log*
+yarn-error.log
+/coverage
+.idea
+yarn.lock
+package-lock.json
+*bak
+.vscode
+screenshot
+.firebase
+.eslintcache
