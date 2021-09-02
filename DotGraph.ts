@@ -2,7 +2,7 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-01 13:48:22
- * @LastEditTime: 2021-09-01 16:27:30
+ * @LastEditTime: 2021-09-02 10:53:15
  * @Description: file content
  */
 
@@ -21,8 +21,6 @@ export class DotGraph {
     markerLength: number,
   }
   ctx: CanvasRenderingContext2D
-
-
 
   constructor(
     constructor: HTMLElement,
@@ -116,6 +114,11 @@ export class DotGraph {
     ctx.fillStyle = fillStyle
   }
 
+
+  clear() {
+    const { markerSize, height, width } = this.config
+    this.ctx.clearRect(markerSize, 0, width, height - markerSize)
+  }
 
 
   static defaultConfig = {

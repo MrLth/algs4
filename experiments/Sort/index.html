@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--
+ * @Author: mrlthf11
+ * @LastEditors: mrlthf11
+ * @Date: 2021-09-01 14:07:33
+ * @LastEditTime: 2021-09-02 17:06:11
+ * @Description: file content
+-->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="../DotGraph.js"></script>
+  <script src="./02 | P153 | 选择排序.js"></script>
+  <script src="./02 | P157 | 插入排序.js"></script>
+  <script src="./02 | P158 | 插入排序优化.js"></script>
+  <script src="./02 | P162 | 希尔排序.js"></script>
+  <script src="./02 | P170 | 归并排序︲原地归并.js"></script>
+  <script src="./02 | P171 | 自顶而下的归并排序.js"></script>
+  <script>
+    const dotGraph = new DotGraph(document.getElementById('root'), {
+      maxX: 10,
+      maxY: 2000000,
+      markerUnit: 100000,
+      markerUnitX: 1,
+      markerSize: 100
+    });
+
+    const list = Array.from({ length: 1000 }).map((_, i) => i)
+    for (let i = 0; i < list.length; i++) {
+      const j = Math.random() * list.length | 0
+      const t = list[j]
+      list[j] = list[i]
+      list[i] = t
+    }
+
+
+    class Test {
+      i = 0
+
+      constructor(SupperSort, ...args) {
+        this.s = new Proxy(
+          new SupperSort(...args),
+          {
+            get: (target, prop) => {
+              if (/\d+/.test(prop)) {
+                this.i++
+              }
+              return target[prop]
+            },
+            set: (target, prop, value) => {
+              if (/\d+/.test(prop)) {
+                this.i++
+              }
+              target[prop] = value
+              return true
+            }
+          }
+        )
+      }
+      resort(x, color, size, ...args) {
+        const y = this.i
+        console.log(this.s.resort(args))
+        dotGraph.dot(x, this.i - y, color, size)
+        return this
+      }
+    }
+
+    new Test(SelectSort, list).resort(1, 'red', 6).resort(1, 'green', 4)
+    new Test(InsertSort, list).resort(2, 'red', 4).resort(2, 'green', 4)
+    new Test(InsertSortPro, list).resort(3, 'red', 4).resort(3, 'green', 4)
+    new Test(ShellSort, list).resort(4, 'red', 4).resort(4, 'green', 4)
+    new Test(MergeSort, list).resort(5, 'red', 6).resort(5, 'green', 4)
+    new Test(MergeSortRecursion, list).resort(6, 'red', 6).resort(6, 'green', 4)
+
+  </script>
+</body>
+
+</html>
