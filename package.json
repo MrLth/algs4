@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "lodash-es": "^4.17.21",
+    "lth-tools": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.4"
+  }
+}

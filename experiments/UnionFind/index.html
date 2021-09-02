@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--
+ * @Author: mrlthf11
+ * @LastEditors: mrlthf11
+ * @Date: 2021-09-01 14:07:33
+ * @LastEditTime: 2021-09-02 08:03:57
+ * @Description: file content
+-->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="./DotGraph.js"></script>
+  <script src="./01 | P147 | UnionFind︲路径压缩的加权 quick-union.js"></script>
+  <script src="./mediumUF.js"></script>
+
+  <script>
+    const dotGraph = new DotGraph(document.getElementById('root'), {
+      maxX: 1000,
+      maxY: 1000,
+      markerUnit: 20,
+      markerUnitX: 50
+    });
+
+    class UF extends UnionFind {
+      constructor(...args) {
+        super(...args);
+      }
+      union(x, ...args) {
+        const y = this.i
+        super.union(...args);
+        console.log(this.i - y)
+        dotGraph.dot(x, this.i - y, 'red', 2)
+      }
+      connected(x, ...args) {
+        const y = this.i
+        const rst = super.connected(...args);
+        dotGraph.dot(x, this.i - y, 'green', 1)
+        return rst
+      }
+    }
+
+    const uf = new UF(625);
+
+    list.split('\n').map((row, i) => {
+      const [p, q] = row.split(' ').map(Number)
+      console.log(p, q)
+      if (uf.connected(i, p, q)) {
+        return
+      }
+      uf.union(i, p, q)
+    })
+  </script>
+</body>
+
+</html>
