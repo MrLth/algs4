@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!--
+ * @Author: mrlthf11
+ * @LastEditors: mrlthf11
+ * @Date: 2021-09-01 14:07:33
+ * @LastEditTime: 2021-09-06 10:01:34
+ * @Description: file content
+-->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="../DotGraph.js"></script>
+  <script>
+    const dotGraph = new DotGraph(document.getElementById('root'), {
+      maxX: 1024,
+      maxY: 50000,
+      markerUnit: 10000,
+      markerUnitX: 50,
+      markerSize: 100
+    });
+
+    for (let length = 1; length <= 1024; length++) {
+
+
+      dotGraph.dot(length, 1.5 * length * 2 * (Math.log(length) / Math.log(2)), 'black', 2)
+      dotGraph.dot(length, 1.5 * length * 3 * (Math.log(length) / Math.log(3)), 'red', 1)
+      dotGraph.dot(length, 1.5 * length * 4 * (Math.log(length) / Math.log(4)), 'blue', 1)
+      dotGraph.dot(length, 1.5 * length * 5 * (Math.log(length) / Math.log(5)), 'green', 1)
+      dotGraph.dot(length, 1.5 * length * 6 * (Math.log(length) / Math.log(6)), 'grey', 1)
+      dotGraph.dot(length, 1.5 * length * 7 * (Math.log(length) / Math.log(7)), '#13c2c2', 1)
+      dotGraph.dot(length, 1.5 * length * 8 * (Math.log(length) / Math.log(8)), '#722ed1', 1)
+      dotGraph.dot(length, 1.5 * length * 9 * (Math.log(length) / Math.log(9)), '#eb2f96', 1)
+
+
+    }
+
+  </script>
+</body>
+
+</html>

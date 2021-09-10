@@ -2,7 +2,7 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-02 16:33:12
- * @LastEditTime: 2021-09-02 16:42:06
+ * @LastEditTime: 2021-09-03 11:05:21
  * @Description: file content
  */
 export class MergeSort<T> extends Array {
@@ -49,6 +49,11 @@ export class MergeSort<T> extends Array {
   }
 
   resort() {
-    return this.merge(0, this.length / 2 | 0, this.length)
+    const N = this.length
+    for (let sz = 1; sz < N; sz += sz) { // sz 子数组大小
+      for (let lo = 0; lo < N - sz; lo += sz + sz) {
+        this.merge(lo, lo + sz - 1, Math.min(N - 1, lo + sz + sz - 1))
+      }
+    }
   }
 }

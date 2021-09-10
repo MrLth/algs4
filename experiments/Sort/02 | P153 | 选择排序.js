@@ -1,3 +1,10 @@
+/*
+ * @Author: mrlthf11
+ * @LastEditors: mrlthf11
+ * @Date: 2021-09-02 09:49:57
+ * @LastEditTime: 2021-09-08 09:08:36
+ * @Description: file content
+ */
 class SelectSort extends Array {
     constructor(array, comparer) {
         super(array.length);

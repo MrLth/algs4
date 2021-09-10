@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!--
+ * @Author: mrlthf11
+ * @LastEditors: mrlthf11
+ * @Date: 2021-09-01 14:07:33
+ * @LastEditTime: 2021-09-03 12:03:57
+ * @Description: file content
+-->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="../DotGraph.js"></script>
+  <script src="./02 | P171 | 自顶而下的归并排序.js"></script>
+  <script src="./02 | P175 | 自底而上的归并排序.js"></script>
+  <script>
+    const dotGraph = new DotGraph(document.getElementById('root'), {
+      maxX: 1100,
+      maxY: 20000,
+      markerUnit: 1000,
+      markerUnitX: 50,
+      markerSize: 100
+    });
+
+    for (let length = 0; length <= 1024; length++) {
+
+
+      const list = Array.from({ length }).map((_, i) => i)
+      for (let i = 0; i < list.length; i++) {
+        const j = Math.random() * list.length | 0
+        const t = list[j]
+        list[j] = list[i]
+        list[i] = t
+      }
+
+
+      class Test {
+        i = 0
+
+        constructor(SupperSort, ...args) {
+          this.s = new Proxy(
+            new SupperSort(...args),
+            {
+              get: (target, prop) => {
+                if (/\d+/.test(prop)) {
+                  this.i++
+                }
+                return target[prop]
+              },
+              set: (target, prop, value) => {
+                if (/\d+/.test(prop)) {
+                  this.i++
+                }
+                target[prop] = value
+                return true
+              }
+            }
+          )
+        }
+        resort(x, color, size, ...args) {
+          const y = this.i
+          console.log(this.s.resort(args))
+          dotGraph.dot(x, this.i - y, color, size)
+          return this
+        }
+      }
+
+      new Test(MergeSortRecursion, list).resort(length, 'red', 1)
+      new Test(MergeSort, list).resort(length, 'green', 1)
+      dotGraph.dot(length, 6 * length * Math.log10(length), 'blue', 1)
+
+
+    }
+
+  </script>
+</body>
+
+</html>

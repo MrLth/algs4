@@ -3,7 +3,7 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-01 14:07:33
- * @LastEditTime: 2021-09-02 17:06:11
+ * @LastEditTime: 2021-09-03 17:08:01
  * @Description: file content
 -->
 <html lang="en">
@@ -28,8 +28,9 @@
   <script src="./02 | P157 | 插入排序.js"></script>
   <script src="./02 | P158 | 插入排序优化.js"></script>
   <script src="./02 | P162 | 希尔排序.js"></script>
-  <script src="./02 | P170 | 归并排序︲原地归并.js"></script>
   <script src="./02 | P171 | 自顶而下的归并排序.js"></script>
+  <script src="./02 | P175 | 自底而上的归并排序.js"></script>
+  <script src="./02 | P182 | 快速排序.js"></script>
   <script>
     const dotGraph = new DotGraph(document.getElementById('root'), {
       maxX: 10,
@@ -73,7 +74,8 @@
       }
       resort(x, color, size, ...args) {
         const y = this.i
-        console.log(this.s.resort(args))
+        this.s.resort()
+        console.log(this.s)
         dotGraph.dot(x, this.i - y, color, size)
         return this
       }
@@ -83,8 +85,10 @@
     new Test(InsertSort, list).resort(2, 'red', 4).resort(2, 'green', 4)
     new Test(InsertSortPro, list).resort(3, 'red', 4).resort(3, 'green', 4)
     new Test(ShellSort, list).resort(4, 'red', 4).resort(4, 'green', 4)
-    new Test(MergeSort, list).resort(5, 'red', 6).resort(5, 'green', 4)
-    new Test(MergeSortRecursion, list).resort(6, 'red', 6).resort(6, 'green', 4)
+    new Test(MergeSortRecursion, list).resort(5, 'red', 6).resort(5, 'green', 4)
+    new Test(MergeSort, list).resort(6, 'red', 6).resort(6, 'green', 4)
+    // 快速排序由于第二次是对有序数组进行排序，没经过打乱，所以出现最坏情况平方级别
+    new Test(QuickSort, list).resort(7, 'red', 6).resort(7, 'green', 4)
 
   </script>
 </body>

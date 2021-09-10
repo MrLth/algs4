@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--
+ * @Author: mrlthf11
+ * @LastEditors: mrlthf11
+ * @Date: 2021-09-01 14:07:33
+ * @LastEditTime: 2021-09-04 08:28:25
+ * @Description: file content
+-->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="../DotGraph.js"></script>
+  <script src="./02 | P182 | 快速排序.js"></script>
+  <script>
+    const dotGraph = new DotGraph(document.getElementById('root'), {
+      maxX: 10000,
+      maxY: 500000,
+      markerUnit: 200000,
+      markerUnitX: 1000,
+      markerSize: 100
+    });
+
+    (async () => {
+
+
+      for (let length = 0; length <= 10000; length++) {
+
+        if (length % 50 === 0) {
+          await new Promise(resolve => setTimeout(resolve, 0))
+        }
+
+        const list = Array.from({ length }).map((_, i) => i)
+        for (let i = 0; i < list.length; i++) {
+          const j = Math.random() * list.length | 0
+          const t = list[j]
+          list[j] = list[i]
+          list[i] = t
+        }
+
+
+        class Test {
+          i = 0
+
+          constructor(SupperSort, ...args) {
+            this.s = new Proxy(
+              new SupperSort(...args),
+              {
+                get: (target, prop) => {
+                  if (/\d+/.test(prop)) {
+                    this.i++
+                  }
+                  return target[prop]
+                },
+                set: (target, prop, value) => {
+                  if (/\d+/.test(prop)) {
+                    this.i++
+                  }
+                  target[prop] = value
+                  return true
+                }
+              }
+            )
+          }
+          resort(x, color, size, ...args) {
+            const y = this.i
+            const y1 = this.s.j
+
+            this.s.resort()
+            dotGraph.dot(x, this.i - y, 'green', size)
+            dotGraph.dot(x, this.s.j - y1, 'red', 2)
+            return this
+          }
+        }
+
+        new Test(QuickSort, list).resort(length, 'red', 1)
+        dotGraph.dot(length, 2 * length * Math.log(length), 'blue', 1)
+      }
+
+
+    })()
+
+  </script>
+</body>
+
+</html>

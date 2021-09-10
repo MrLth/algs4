@@ -2,7 +2,7 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-02 16:33:12
- * @LastEditTime: 2021-09-02 17:11:21
+ * @LastEditTime: 2021-09-08 09:43:10
  * @Description: file content
  */
 class MergeSortRecursion extends Array {
@@ -36,11 +36,11 @@ class MergeSortRecursion extends Array {
             else if (j > hi) {
                 this[k] = this.aux[i++];
             }
-            else if (this.less(this.aux[i], this.aux[j])) {
-                this[k] = this.aux[i++];
+            else if (this.less(this.aux[j], this.aux[i])) {
+                this[k] = this.aux[j++];
             }
             else {
-                this[k] = this.aux[j++];
+                this[k] = this.aux[i++];
             }
         }
         return this;

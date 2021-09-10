@@ -2,7 +2,7 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-02 16:33:12
- * @LastEditTime: 2021-09-02 17:07:01
+ * @LastEditTime: 2021-09-08 11:26:30
  * @Description: file content
  */
 export class MergeSortRecursion<T> extends Array {
@@ -20,7 +20,7 @@ export class MergeSortRecursion<T> extends Array {
   }
 
   less(a: T, b: T) {
-    return a.valueOf() < b.valueOf()
+    return (a as any)?.valueOf() < (b as any)?.valueOf()
   }
 
   exch(ai: number, bi: number) {
@@ -36,20 +36,23 @@ export class MergeSortRecursion<T> extends Array {
     }
     for (let k = lo; k <= hi; k++) {
       if (i > mid) {
-        this[k] = this.aux[j++]
-      } else if (j > hi) {
-        this[k] = this.aux[i++]
-      } else if (this.less(this.aux[i], this.aux[j])) {
-        this[k] = this.aux[i++]
-      } else {
-        this[k] = this.aux[j++]
+        this[k] = this.aux[j++];
+      }
+      else if (j > hi) {
+        this[k] = this.aux[i++];
+      }
+      else if (this.less(this.aux[j], this.aux[i])) {
+        this[k] = this.aux[j++];
+      }
+      else {
+        this[k] = this.aux[i++];
       }
     }
     return this
   }
 
   resort() {
-    const sort = (lo, hi) => {
+    const sort = (lo: number, hi: number) => {
       if (hi <= lo) {
         return;
       }
