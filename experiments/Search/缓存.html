@@ -1,0 +1,69 @@
+<!--
+ * @Author: mrlthf11
+ * @LastEditors: mrlthf11
+ * @Date: 2021-09-11 08:52:44
+ * @LastEditTime: 2021-09-13 09:28:43
+ * @Description: file content
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <script src="../DotGraph.js"></script>
+  <script src="./03 | P240 | 符号表︲有序平行数组.js"> </script>
+  <script src="./04 | P247 | 练习 3.1.25︲有序数组符号表优化︲缓存.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+
+
+  <script type="text/javascript">
+
+    async function main() {
+      const len = 147000
+      const dotGraph = new DotGraph(document.getElementById('root'), {
+        maxX: 18500,
+        maxY: 10000,
+        markerUnit: 1000,
+        markerUnitY: 500,
+        markerSize: 80
+      });
+
+      const txt = await fetch('./tale.txt').then(v => v.text())
+      const minLen = 8
+      const words = txt.split('\r\n').map(v => v.split(' ')).flat()
+      console.log(words.length)
+      const st = new CacheST(dotGraph)
+
+      let i = 0
+      for (const word of words) {
+        if (word.length < minLen) {
+          continue
+        }
+        st.i = i
+        const c = st.count
+        const count = st.get(word)
+        st.set(word, (count ?? 0) + 1)
+        dotGraph.dot(i, st.count - c, 'grey', 1)
+        dotGraph.dot(i, st.count / i, 'red', 1)
+        i++
+      }
+      console.log(st)
+    }
+    main()
+
+  </script>
+</body>
+
+</html>

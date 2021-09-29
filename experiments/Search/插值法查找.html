@@ -1,0 +1,94 @@
+<!--
+ * @Author: mrlthf11
+ * @LastEditors: mrlthf11
+ * @Date: 2021-09-11 08:52:44
+ * @LastEditTime: 2021-09-11 17:19:28
+ * @Description: file content
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <script src="../DotGraph.js"></script>
+  <script src="./03 | P240 | 符号表︲有序平行数组.js"> </script>
+  <script src="./04 | P247 | 练习 3.1.24︲插值法查找.js"> </script>
+</head>
+
+<body>
+  <div id="root"></div>
+
+
+  <script type="text/javascript">
+
+    async function main() {
+      const dotGraph = new DotGraph(document.getElementById('root'), {
+        maxX: 100000,
+        maxY: 300,
+        markerUnit: 50,
+        markerUnitX: 10000,
+        markerSize: 50
+      });
+
+      const array = Array.from({ length: 100000 }).map(() => Math.random() * 1000 | 0)
+
+
+      {
+        const st = new InsertValueST(dotGraph)
+        const sta = new BinarySearchST(dotGraph)
+
+        // const st = new BinarySearchST(dotGraph)
+
+        let i = 0
+        for (const item of array) {
+          st.i = i
+          sta.i = i
+
+          const c = st.count
+          const ca = sta.count
+
+          const count = st.get(item)
+          const counta = sta.get(item)
+
+
+          const fns = [
+            () => {
+
+              st.set(item, (count ?? 0) + 1)
+              dotGraph.dot(i, st.count - c, '#bbffbb', 1)
+              dotGraph.dot(i, st.count / i, 'green', 1)
+
+            },
+            () => {
+              sta.set(item, (counta ?? 0) + 1)
+              dotGraph.dot(i, sta.count - ca, '#ffcccc', 1)
+              dotGraph.dot(i, sta.count / i, 'red', 1)
+            },
+          ];
+
+          (i % 2 ? fns : fns.reverse()).map(fn => fn())
+
+          i++
+        }
+
+        console.log(st)
+      }
+
+
+
+    }
+    main()
+
+  </script>
+</body>
+
+</html>

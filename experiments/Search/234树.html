@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--
+ * @Author: mrlthf11
+ * @LastEditors: mrlthf11
+ * @Date: 2021-09-15 11:53:53
+ * @LastEditTime: 2021-09-24 10:46:48
+ * @Description: file content
+-->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="../DotGraph.js"></script>
+  <script src="03 | P266 | 练习 3.2.34︲线性符号表.js"></script>
+  <script src="./03 | P252 | 符号表︲二叉查找树.js"> </script>
+  <script src="./03 | P281 | 符号表︲红黑树.js"></script>
+  <script src="./03 | P283 | 符号表︲自顶而下的 2-3-4 树.js"></script>
+  <script src="./03 | P289 | 练习 3.3.26︲RBT234优化︲非递归插入.js"></script>
+  <script>
+
+
+
+    async function main() {
+      const len = 147000
+      const txt = await fetch('./tale.txt').then(v => v.text())
+      const minLen = 8
+      const words = txt.split('\r\n').map(v => v.split(' ')).flat()
+
+      function test(title, bstClass, set = 'set') {
+        const st = new bstClass([])
+        console.time(title)
+        for (const word of words) {
+          if (word.length < minLen) {
+            continue
+          }
+          st[set](word, (st.get(word) ?? 0) + 1)
+        }
+        console.log(st.heightRecursion(), st.size(), st.isBST())
+        console.timeEnd(title)
+      }
+
+      test('传统红黑树递归插入', RedBlackBST, 'setRecursion')
+      test('传统红黑树非递归插入', RedBlackBST)
+      test('自顶向下234树插入', RedBlackBST234)
+      test('自顶向下234树一遍非递归插入', RedBlackBST234While)
+
+    }
+
+    console.log(new RedBlackBST234While([1, 2, 3, 4, 5, 6]))
+
+    main()
+  </script>
+</body>
+
+
+
+</html>

@@ -1,0 +1,89 @@
+<!--
+ * @Author: mrlthf11
+ * @LastEditors: mrlthf11
+ * @Date: 2021-09-15 11:53:53
+ * @LastEditTime: 2021-09-23 08:28:06
+ * @Description: file content
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script src="../DotGraph.js"></script>
+  <script src="./03 | P252 | 符号表︲二叉查找树.js"> </script>
+  <script>
+    const st = new BST([])
+
+  </script>
+
+  <script src="./03 | P266 | 练习 3.2.34︲线性符号表.js"></script>
+
+  <script>
+
+    async function main() {
+      const len = 147000
+      const dotGraph = new DotGraph(document.getElementById('root'), {
+        maxX: 18500,
+        maxY: 50,
+        markerUnit: 1000,
+        markerUnitY: 1,
+        markerSize: 80
+      });
+
+      const txt = await fetch('./tale.txt').then(v => v.text())
+      const minLen = 8
+      const words = txt.split('\r\n').map(v => v.split(' ')).flat()
+      console.log(words.length)
+      const st1 = new BSTExtValidate(dotGraph)
+
+      let i = 0
+      for (const word of words) {
+        if (word.length < minLen) {
+          continue
+        }
+        st1.i = i
+        st.i = i
+        const c1 = count1
+        const c = count
+        st1.set(word, (st1.get(word) ?? 0) + 1)
+        st.set(word, (st.get(word) ?? 0) + 1)
+
+        const cbs = [
+          () => {
+
+            dotGraph.dot(i, count1 - c1, '#fbb', 1)
+            dotGraph.dot(i, count1 / i, 'red', 1)
+          },
+          () => {
+
+            dotGraph.dot(i, count - c, '#bbf', 1)
+            dotGraph.dot(i, count / i, 'blue', 1)
+            i++
+          }
+        ];
+        (i % 2 ? cbs : cbs.reverse()).map(cb => cb())
+      }
+      console.log(st)
+    }
+    main()
+  </script>
+</body>
+
+
+
+</html>
