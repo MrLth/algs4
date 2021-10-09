@@ -2,7 +2,7 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-13 13:39:03
- * @LastEditTime: 2021-09-24 10:49:12
+ * @LastEditTime: 2021-10-01 13:48:13
  * @Description: file content
  */
 let count = 0
@@ -430,18 +430,20 @@ class BST {
             return true;
         }
         if (node.r && (node.r.k < node.k || (max && node.r.k > max))) {
+            console.log('unOrder node', node)
             return false;
         }
         if (node.l && (node.l.k > node.k || (min && node.l.k < min))) {
+            console.log('unOrder node', node)
             return false;
         }
-        return this.isOrdered(node.l, min, max) && this.isOrdered(node.r, min, max);
+        return this.isOrdered(node.l, min, node.k) && this.isOrdered(node.r, node.k, max);
     }
     isBST() {
-        if (!this.validateSize()){
+        if (!this.validateSize()) {
             console.log('大小不对')
             return false;
-        }if (!this.isOrdered()) {
+        } if (!this.isOrdered()) {
             console.log('键值无序')
             return false;
         } if (!this.isUniqueKey()) {

@@ -3,7 +3,7 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-15 11:53:53
- * @LastEditTime: 2021-09-24 10:46:48
+ * @LastEditTime: 2021-10-01 22:22:20
  * @Description: file content
 -->
 <html lang="en">
@@ -37,8 +37,8 @@
       const len = 147000
       const txt = await fetch('./tale.txt').then(v => v.text())
       const minLen = 8
-      const words = txt.split('\r\n').map(v => v.split(' ')).flat()
-
+      const words = txt.split('\r\n').map(v => v.split(' ')).flat().slice(0,147000)
+      console.log(words.slice(-1))
       function test(title, bstClass, set = 'set') {
         const st = new bstClass([])
         console.time(title)
@@ -48,7 +48,7 @@
           }
           st[set](word, (st.get(word) ?? 0) + 1)
         }
-        console.log(st.heightRecursion(), st.size(), st.isBST())
+        console.log(st, st.heightRecursion(), st.size(), st.isBST())
         console.timeEnd(title)
       }
 
