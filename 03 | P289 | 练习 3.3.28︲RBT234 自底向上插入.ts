@@ -2,12 +2,13 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-22 14:48:05
- * @LastEditTime: 2021-10-11 16:06:22
+ * @LastEditTime: 2021-10-11 09:36:41
  * @Description: file content
  */
 
+import { times } from 'lodash'
 import { BSTNode, BST } from './03 | P266 | 练习 3.2.34︲线性符号表'
-class RedBlackBSTNode<K, V> extends BSTNode<K, V>  {
+export class RedBlackBSTNode<K, V> extends BSTNode<K, V>  {
   l: RedBlackBSTNode<K, V> | null = null
   r: RedBlackBSTNode<K, V> | null = null
   red = true
@@ -17,7 +18,7 @@ class RedBlackBSTNode<K, V> extends BSTNode<K, V>  {
 }
 
 
-export class RedBlackBST<K, V> extends BST<K, V> {
+export class RedBlackBST234BottomUp<K, V> extends BST<K, V> {
   root: RedBlackBSTNode<K, V> | null
   cache: RedBlackBSTNode<K, V> | null
 
@@ -37,12 +38,18 @@ export class RedBlackBST<K, V> extends BST<K, V> {
       return new RedBlackBSTNode(k, v)
     }
 
+
     const cmp = this.compare(k, node.k)
     if (cmp < 0) node.l = this.setBase(node.l, k, v)
     else if (cmp > 0) node.r = this.setBase(node.r, k, v)
     else node.v = v
 
-    node = this.flipColor(this.rotateRight(this.rotateLeft(node)))
+    node = this.rotateRight(this.rotateLeft(node))
+
+    if ((node.l && node.l.k === k) || (node.r && node.r.k === k)) {
+      this.flipColor(node) // 只需要变动这一条
+    }
+
     node.size = 1 + (node.l ? node.l.size : 0) + (node.r ? node.r.size : 0)
     return node
   }

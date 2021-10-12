@@ -2,7 +2,7 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-22 14:48:05
- * @LastEditTime: 2021-10-11 16:06:22
+ * @LastEditTime: 2021-10-11 11:30:05
  * @Description: file content
  */
 
@@ -48,7 +48,7 @@ export class RedBlackBST<K, V> extends BST<K, V> {
   }
 
 
-  rotateLeft(a: RedBlackBSTNode<K, V>) {
+  private rotateLeft(a: RedBlackBSTNode<K, V>) {
     if (!(a.r && a.r.red) || (a.l && a.l.red)) {
       return a
     }
@@ -62,7 +62,7 @@ export class RedBlackBST<K, V> extends BST<K, V> {
     return b
   }
 
-  rotateRight(b: RedBlackBSTNode<K, V>) {
+  private rotateRight(b: RedBlackBSTNode<K, V>) {
     if (!(b.l && b.l.red) || !(b.l && b.l.l && b.l.l.red)) {
       return b
     }
@@ -76,7 +76,7 @@ export class RedBlackBST<K, V> extends BST<K, V> {
     return a
   }
 
-  flipColor(node: RedBlackBSTNode<K, V>) {
+  private flipColor(node: RedBlackBSTNode<K, V>) {
     if (!(node.l && node.l.red) || !(node.r && node.r.red)) {
       return node;
     }
@@ -84,5 +84,39 @@ export class RedBlackBST<K, V> extends BST<K, V> {
     node.r.red = false
     node.red = true
     return node
+  }
+
+
+  is23(node: RedBlackBSTNode<K, V> = this.root) {
+    if (!node) {
+      return true
+    }
+    if (node.r && node.r.red) {
+      return false
+    }
+    if (node.l && node.l.red && node.l.l && node.l.l.red) {
+      return false
+    }
+    return this.is23(node.l) && this.is23(node.r)
+  }
+
+  // 所有空链接到根结点的高度应该相等
+  isBalanced(
+    node: RedBlackBSTNode<K, V> = this.root,
+    ref = { current: null, rst: true },
+    height = 0,
+  ) {
+    if (!node) {
+      if (ref.current === null) {
+        ref.current = height
+        return true
+      }
+      return ref.rst = (ref.current === height)
+    }
+    if (ref.rst) {
+      height = node.red ? height : height + 1
+      return this.isBalanced(node.l, ref, height) && this.isBalanced(node.r, ref, height)
+    }
+    return false
   }
 }

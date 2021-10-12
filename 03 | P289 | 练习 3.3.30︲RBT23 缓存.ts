@@ -2,7 +2,7 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-22 14:48:05
- * @LastEditTime: 2021-10-11 16:06:22
+ * @LastEditTime: 2021-10-11 10:17:34
  * @Description: file content
  */
 
@@ -17,13 +17,35 @@ class RedBlackBSTNode<K, V> extends BSTNode<K, V>  {
 }
 
 
-export class RedBlackBST<K, V> extends BST<K, V> {
+export class RedBlackBSTCache<K, V> extends BST<K, V> {
   root: RedBlackBSTNode<K, V> | null
   cache: RedBlackBSTNode<K, V> | null
 
   constructor(array) {
     super(array)
   }
+
+
+  get(k: K) {
+    if (this.cache && this.compare(this.cache.k, k) === 0) {
+      return this.cache.v
+    }
+    const { root, compare } = this
+    let node = root
+    while (node !== null) {
+      const ret = compare(k, node.k)
+      if (ret > 0) {
+        node = node.r
+      } else if (ret < 0) {
+        node = node.l
+      } else {
+        this.cache = node
+        return node.v
+      }
+    }
+    return null
+  }
+
 
 
   set(k: K, v: V) {
@@ -34,7 +56,7 @@ export class RedBlackBST<K, V> extends BST<K, V> {
 
   private setBase(node: RedBlackBSTNode<K, V>, k: K, v: V) {
     if (node === null) {
-      return new RedBlackBSTNode(k, v)
+      return this.cache = new RedBlackBSTNode(k, v)
     }
 
     const cmp = this.compare(k, node.k)
@@ -48,7 +70,7 @@ export class RedBlackBST<K, V> extends BST<K, V> {
   }
 
 
-  rotateLeft(a: RedBlackBSTNode<K, V>) {
+  private rotateLeft(a: RedBlackBSTNode<K, V>) {
     if (!(a.r && a.r.red) || (a.l && a.l.red)) {
       return a
     }
@@ -62,7 +84,7 @@ export class RedBlackBST<K, V> extends BST<K, V> {
     return b
   }
 
-  rotateRight(b: RedBlackBSTNode<K, V>) {
+  private rotateRight(b: RedBlackBSTNode<K, V>) {
     if (!(b.l && b.l.red) || !(b.l && b.l.l && b.l.l.red)) {
       return b
     }
@@ -76,7 +98,7 @@ export class RedBlackBST<K, V> extends BST<K, V> {
     return a
   }
 
-  flipColor(node: RedBlackBSTNode<K, V>) {
+  private flipColor(node: RedBlackBSTNode<K, V>) {
     if (!(node.l && node.l.red) || !(node.r && node.r.red)) {
       return node;
     }

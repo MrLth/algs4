@@ -2,7 +2,7 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-13 13:39:03
- * @LastEditTime: 2021-10-01 13:48:13
+ * @LastEditTime: 2021-10-11 11:28:17
  * @Description: file content
  */
 let count = 0
@@ -451,5 +451,35 @@ class BST {
             return false;
         }
         return true;
+    }
+    is23(node = this.root) {
+        if (!node) {
+            return true
+        }
+        if (node.r && node.r.red) {
+            return false
+        }
+        if (node.l && node.l.red && node.l.l && node.l.l.red) {
+            return false
+        }
+        return this.is23(node.l) && this.is23(node.r)
+    }
+    isBalanced(
+        node = this.root,
+        ref = { current: null, rst: true },
+        height = 0,
+    ) {
+        if (!node) {
+            if (ref.current === null) {
+                ref.current = height
+                return true
+            }
+            return ref.rst = (ref.current === height)
+        }
+        if (ref.rst) {
+            height = node.red ? height : height + 1
+            return this.isBalanced(node.l, ref, height) && this.isBalanced(node.r, ref, height)
+        }
+        return false
     }
 }

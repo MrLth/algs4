@@ -2,7 +2,7 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-22 14:48:05
- * @LastEditTime: 2021-09-23 10:29:44
+ * @LastEditTime: 2021-10-12 11:04:24
  * @Description: file content
  */
 class RedBlackBSTNode extends BSTNode {
@@ -82,10 +82,30 @@ class RedBlackBST extends BST {
         a.size = 1 + (a.l ? a.l.size : 0) + (a.r ? a.r.size : 0);
         return b;
     }
+    rotateLeftBase(a) {
+        const b = a.r;
+        a.r = b.l;
+        b.l = a;
+        b.red = a.red;
+        a.red = true;
+        b.size = a.size;
+        a.size = 1 + (a.l ? a.l.size : 0) + (a.r ? a.r.size : 0);
+        return b;
+    }
     rotateRight(b) {
         if (!(b.l && b.l.red) || !(b.l && b.l.l && b.l.l.red)) {
             return b;
         }
+        const a = b.l;
+        b.l = a.r;
+        a.r = b;
+        a.red = b.red;
+        b.red = true;
+        a.size = b.size;
+        b.size = 1 + (b.l ? b.l.size : 0) + (b.r ? b.r.size : 0);
+        return a;
+    }
+    rotateRightBase(b) {
         const a = b.l;
         b.l = a.r;
         a.r = b;
@@ -157,5 +177,201 @@ class RedBlackBST extends BST {
         if (!this.isUniqueKey())
             return false;
         return true;
+    }
+    is23(node = this.root) {
+        if (!node) {
+            return true
+        }
+        if (node.r && node.r.red) {
+            return false
+        }
+        if (node.l && node.l.red && node.l.l && node.l.l.red) {
+            return false
+        }
+        return this.is23(node.l) && this.is23(node.r)
+    }
+    deleteMin() {
+        // debugger
+
+        if (this.root === null) {
+            return null
+        }
+
+        const { l, r } = this.root
+        if (!(l && l.red) && !(r && r.red)) {
+            this.root.red = true
+        }
+
+        const ctx = { v: undefined }
+
+        this.root = this.deleteMinBase(ctx, this.root)
+
+        if (this.root) {
+            this.root.red = false
+        }
+
+        return ctx.v
+    }
+
+    deleteMinBase(ctx, node) {
+        if (node.l === null) {
+            ctx.v = node.v
+            return null
+        }
+
+        if (!node.l.red && !node.l.l?.red) {
+            node = this.moveRedLeft(node)
+        }
+
+        node.l = this.deleteMinBase(ctx, node.l)
+        return this.balance(node)
+    }
+
+    moveRedLeft(node) {
+        this.reverseColor(node)
+        if (node.r?.l?.red) {
+            node.r = this.rotateRightBase(node.r)
+            node = this.rotateLeftBase(node)
+            this.reverseColor(node)
+        }
+        return node
+    }
+
+    reverseColor(node) {
+        node.red = !node.red
+        node.l.red = !node.l.red
+        node.r.red = !node.r.red
+    }
+
+    balance(node) {
+        if (node.r?.red) node = this.rotateLeftBase(node)
+        if (node.l?.red && node.l?.l?.red) node = this.rotateRightBase(node)
+        if (node.l?.red && node.r?.red) this.reverseColor(node)
+
+
+        // node = this.flipColor(this.rotateRight(this.rotateLeft(node)))
+        node.size = 1 + (node.l ? node.l.size : 0) + (node.r ? node.r.size : 0)
+        return node
+    }
+
+    deleteMax() {
+        if (this.root === null) return null
+
+        if (!this.root.l?.red && !this.root.r?.red) {
+            this.root.red = true
+        }
+
+        const ctx = { v: undefined }
+
+        this.root = this.deleteMaxBase(ctx, this.root)
+
+        if (this.root) this.root.red = false
+
+        return ctx.v
+    }
+
+    deleteMaxBase(ctx, node) {
+        if (node.l?.red) {
+            node = this.rotateRightBase(node)
+        }
+
+        if (node.r === null) {
+            ctx.v = node.v
+            return null
+        }
+
+        if (!node.r.red && !node.r.l?.red) {
+            node = this.moveRedRight(node)
+        }
+
+        node.r = this.deleteMaxBase(ctx, node.r)
+        return this.balance(node)
+    }
+
+
+    moveRedRight(node) {
+        this.reverseColor(node)
+        if (node.l?.l?.red) {
+            node = this.rotateRightBase(node)
+            this.reverseColor(node)
+        }
+        return node
+    }
+
+    delete(k) {
+        if (this.root === null) return null
+
+        if (!this.root.l?.red && !this.root.r?.red) {
+            this.root.red = true
+        }
+
+        const ctx = { v: undefined }
+
+        this.root = this.deleteBase(ctx, this.root, k)
+
+        if (this.root) this.root.red = false
+
+        return ctx.v
+    }
+
+    deleteBase(ctx, node, k) {
+        if (this.compare(k, node.k) < 0) {
+            if (node.l === null) {
+                return node
+            }
+
+            if (!node.l.red && !node.l.l?.red) {
+                node = this.moveRedLeft(node)
+            }
+            node.l = this.deleteBase(ctx, node.l, k)
+        } else {
+            if (node.l?.red) {
+                node = this.rotateRightBase(node)
+            }
+            if (node.r === null) {
+                if (this.compare(k, node.k) === 0) {
+                    ctx.v = node.v
+                    return null
+                }
+                return node
+            }
+            if (!node.r.red && !node.r.l?.red) {
+                node = this.moveRedRight(node)
+            }
+            if (this.compare(k, node.k) === 0) {
+                const t = node.v
+                const { k, v } = this.minBase(node.r)
+                node.v = v
+                node.k = k
+                node.r = this.deleteMinBase(ctx, node.r)
+                ctx.v = t
+            } else {
+                node.r = this.deleteBase(ctx, node.r, k)
+            }
+        }
+
+        return this.balance(node)
+    }
+
+    moveRedRight(node) {
+        this.reverseColor(node)
+        if (node.l?.l?.red) {
+            node = this.rotateRightBase(node)
+            this.reverseColor(node)
+        }
+        return node
+    }
+
+    minBase(node) {
+        if (node === null) {
+            return null
+        }
+        while (true) {
+            if (node.l === null) {
+                return node
+            } else {
+                node = node.l
+            }
+        }
     }
 }

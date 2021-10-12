@@ -2,12 +2,12 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-22 14:48:05
- * @LastEditTime: 2021-10-11 16:06:22
+ * @LastEditTime: 2021-10-11 09:18:19
  * @Description: file content
  */
 
 import { BSTNode, BST } from './03 | P266 | 练习 3.2.34︲线性符号表'
-class RedBlackBSTNode<K, V> extends BSTNode<K, V>  {
+export class RedBlackBSTNode<K, V> extends BSTNode<K, V>  {
   l: RedBlackBSTNode<K, V> | null = null
   r: RedBlackBSTNode<K, V> | null = null
   red = true
@@ -17,7 +17,7 @@ class RedBlackBSTNode<K, V> extends BSTNode<K, V>  {
 }
 
 
-export class RedBlackBST<K, V> extends BST<K, V> {
+export class RedBlackBST234AllowRightRed<K, V> extends BST<K, V> {
   root: RedBlackBSTNode<K, V> | null
   cache: RedBlackBSTNode<K, V> | null
 
@@ -37,13 +37,37 @@ export class RedBlackBST<K, V> extends BST<K, V> {
       return new RedBlackBSTNode(k, v)
     }
 
+    this.flipColor(node) // 只需要变动这一条
+
     const cmp = this.compare(k, node.k)
     if (cmp < 0) node.l = this.setBase(node.l, k, v)
     else if (cmp > 0) node.r = this.setBase(node.r, k, v)
     else node.v = v
 
-    node = this.flipColor(this.rotateRight(this.rotateLeft(node)))
+
+    node = this.legalize(node)
+    // node = this.rotateRight(this.rotateLeft(node))
     node.size = 1 + (node.l ? node.l.size : 0) + (node.r ? node.r.size : 0)
+    return node
+  }
+
+  legalize(node: RedBlackBSTNode<K, V>) {
+    if (node.l && node.l.red) {
+      if (node.l.l && node.l.l.red) {
+        return this.rotateRight(node)
+      } else if (node.l.r && node.l.r.red) {
+        node.l = this.rotateLeft(node.l)
+        return this.rotateRight(node)
+      }
+    } else if (node.r && node.r.red) {
+      if (node.r.r && node.r.r.red) {
+        return this.rotateLeft(node)
+      } else if (node.r.l && node.r.l.red) {
+        node = this.rotateLeft(node)
+        node.l = this.rotateLeft(node.l)
+        return this.rotateRight(node)
+      }
+    }
     return node
   }
 

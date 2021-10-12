@@ -2,67 +2,48 @@
  * @Author: mrlthf11
  * @LastEditors: mrlthf11
  * @Date: 2021-09-22 14:48:05
- * @LastEditTime: 2021-09-23 09:56:04
+ * @LastEditTime: 2021-10-11 10:18:35
  * @Description: file content
  */
-import { BSTNode, BST } from './03 | P266 | 练习 3.2.34︲线性符号表';
-class RedBlackBSTNode extends BSTNode {
-    constructor(k, v) {
-        super(k, v);
-        this.l = null;
-        this.r = null;
-        this.red = true;
-    }
-}
-export class RedBlackBST extends BST {
+class RedBlackBSTCache extends RedBlackBST234 {
     constructor(array) {
         super(array);
     }
-    set(k, v) {
-        const stack = [[this, 'root']];
-        const { compare } = this;
-        let node = this.root;
+    get(k) {
+        if (this.cache && this.compare(this.cache.k, k) === 0) {
+            return this.cache.v;
+        }
+        const { root, compare } = this;
+        let node = root;
         while (node !== null) {
             const ret = compare(k, node.k);
-            if (ret < 0) {
-                stack.push([node, 'l']);
-                node = node.l;
-            }
-            else if (ret > 0) {
-                stack.push([node, 'r']);
+            if (ret > 0) {
                 node = node.r;
             }
+            else if (ret < 0) {
+                node = node.l;
+            }
             else {
-                node.v = v;
+                this.cache = node;
+                return node.v;
             }
         }
-        let key, t;
-        if (node === null) {
-            [node, key] = stack.pop();
-            node[key] = new RedBlackBSTNode(k, v);
-        }
-        while (stack.length) {
-            ;
-            [node, key] = stack.pop();
-            t = node[key] = this.flipColor(this.rotateRight(this.rotateLeft(node[key])));
-            t.size = 1 + (t.l ? t.l.size : 0) + (t.r ? t.r.size : 0);
-        }
+        return null;
+    }
+    set(k, v) {
+        this.root = this.setBase(this.root, k, v);
         this.root.red = false;
         return v;
     }
-    setRecursion(k, v) {
-        this.root = this.setRecursionBase(this.root, k, v);
-        this.root.red = false;
-    }
-    setRecursionBase(node, k, v) {
+    setBase(node, k, v) {
         if (node === null) {
-            return new RedBlackBSTNode(k, v);
+            return this.cache = new RedBlackBSTNode(k, v);
         }
         const cmp = this.compare(k, node.k);
         if (cmp < 0)
-            node.l = this.setRecursionBase(node.l, k, v);
+            node.l = this.setBase(node.l, k, v);
         else if (cmp > 0)
-            node.r = this.setRecursionBase(node.r, k, v);
+            node.r = this.setBase(node.r, k, v);
         else
             node.v = v;
         node = this.flipColor(this.rotateRight(this.rotateLeft(node)));
